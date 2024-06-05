@@ -1,20 +1,14 @@
 from flask import Flask, request, jsonify
 import logging
 import pyodbc
+import os
 
 app = Flask(__name__)
 logging.basicConfig(filename='app.log', level=logging.INFO)
 
-# データベース接続設定
-server = 'webapptest-sqlserver.database.windows.net'
-database = 'mydatabase'
-username = 'webapptest-dbadmin'
-password = 'WAT@dmin'
-driver = '{ODBC Driver 18 for SQL Server}'
+# 環境変数から接続情報を取得
+connection_string = os.getenv('DB_CONNECTION_STRING')
 
-connection_string = f'DRIVER={driver};SERVER=tcp:{server},1433;DATABASE={database};UID={username};PWD={password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
-
-# データベース接続の確立
 def get_db_connection():
     conn = pyodbc.connect(connection_string)
     return conn
