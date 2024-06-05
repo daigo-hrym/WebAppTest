@@ -6,11 +6,11 @@ app = Flask(__name__)
 logging.basicConfig(filename='app.log', level=logging.INFO)
 
 # データベース接続設定
-server = 'myserver.database.windows.net'
+server = 'webapptest-sqlserver.database.windows.net'
 database = 'mydatabase'
-username = 'adminuser'
-password = 'password123'
-driver = '{ODBC Driver 17 for SQL Server}'
+username = 'webapptest-dbadmin'
+password = 'WAT@dmin'
+driver = '{ODBC Driver 18 for SQL Server}'
 
 connection_string = f'DRIVER={driver};SERVER=tcp:{server},1433;DATABASE={database};UID={username};PWD={password};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;'
 
