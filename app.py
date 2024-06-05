@@ -10,6 +10,8 @@ logging.basicConfig(filename='app.log', level=logging.INFO)
 connection_string = os.getenv('DB_CONNECTION_STRING')
 
 def get_db_connection():
+    if not connection_string:
+        raise ValueError("接続文字列が設定されていません")
     conn = pyodbc.connect(connection_string)
     return conn
 
