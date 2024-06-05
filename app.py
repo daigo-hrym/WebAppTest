@@ -8,6 +8,7 @@ logging.basicConfig(filename='app.log', level=logging.INFO)
 
 # 環境変数から接続情報を取得
 connection_string = os.getenv('DB_CONNECTION_STRING')
+port = int(os.getenv('PORT', 5000))  # PORT環境変数からポートを取得、デフォルトは5000
 
 def get_db_connection():
     if not connection_string:
@@ -38,4 +39,4 @@ def search_member():
         return jsonify({"error": True, "message": "指定されたIDは存在しません"}), 404
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=port)
