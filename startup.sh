@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # 必要な環境変数をエクスポート
+export PATH=$PATH:/home/.local/bin
 export PORT=${PORT:-5000}
 
 # gunicornの起動コマンド
