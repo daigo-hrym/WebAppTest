@@ -1,9 +1,9 @@
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, render_template, send_from_directory
 import logging
 import pyodbc
 import os
 
-app = Flask(__name__, static_folder='.', static_url_path='')
+app = Flask(__name__)
 
 logging.basicConfig(filename='app.log', level=logging.INFO)
 
@@ -27,11 +27,7 @@ def get_member_name(member_id):
 
 @app.route('/')
 def home():
-    return send_from_directory('.', 'index.html')
-
-@app.route('/<path:filename>')
-def serve_static(filename):
-    return send_from_directory('.', filename)
+    return render_template('index.html')
 
 @app.route('/search', methods=['GET'])
 def search_member():
@@ -48,5 +44,4 @@ def search_member():
         return jsonify({"error": True, "message": "指定されたIDは存在しません"}), 404
 
 if __name__ == '__main__':
-    port = int(os.getenv("PORT", 61234))
     app.run(host='0.0.0.0', port=port)
