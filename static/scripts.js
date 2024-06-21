@@ -25,7 +25,7 @@ document.getElementById('search-btn').addEventListener('click', function() {
             }
         })
         .catch(error => {
-            messageElement.textContent = 'エラーが発生しました';
+            messageElement.textContent = 'エラーが発生しました: ${error.message}`';
             messageElement.style.display = 'block';
         });
 });
