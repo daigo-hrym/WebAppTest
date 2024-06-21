@@ -83,7 +83,3 @@ jobs:
 
       - name: List contents after deployment
         run: ls -lh /home/site/wwwroot
-
-      - name: Display deployment URL
-        run: echo "Deployment URL: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
-        if: always()
