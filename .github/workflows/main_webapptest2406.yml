@@ -33,7 +33,9 @@ jobs:
       # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip . -x 'venv/*' '.git/*' 'release.zip'
+        run: |
+          zip -r release.zip . -x 'venv/*' '.git/*' 'release.zip'
+          ls -lh release.zip
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
@@ -48,7 +50,6 @@ jobs:
     needs: build
     environment:
       name: 'Production'
-      url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
 
@@ -58,8 +59,13 @@ jobs:
         with:
           name: python-app
 
+      - name: List downloaded artifact contents
+        run: ls -lh
+
       - name: Unzip artifact for deployment
-        run: unzip release.zip
+        run: |
+          unzip release.zip
+          ls -lh
 
       - name: Login to Azure
         uses: azure/login@v1
@@ -74,3 +80,9 @@ jobs:
         with:
           app-name: 'WebAppTest2406'
           slot-name: 'Production'
+
+      - name: List contents after deployment
+        run: ls -lh /home/site/wwwroot
+
+      - name: Display deployment URL
+        run: echo "Deployment URL: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
