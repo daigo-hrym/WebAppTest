@@ -5,7 +5,12 @@ import os
 
 app = Flask(__name__)
 
-logging.basicConfig(filename='app.log', level=logging.INFO)
+# ログ設定
+log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.log')
+logging.basicConfig(filename=log_file_path, level=logging.INFO, 
+                    format='%(asctime)s %(levelname)s: %(message)s', 
+                    datefmt='%Y-%m-%d %H:%M:%S', 
+                    encoding='utf-8')  # ★エンコーディングとフォーマットを指定
 
 # 環境変数から接続情報を取得
 connection_string = os.getenv('DB_CONNECTION_STRING')
@@ -13,7 +18,7 @@ port = int(os.getenv('PORT', 61234))  # 環境変数からポートを取得、�
 
 def get_db_connection():
     if not connection_string:
-        raise ValueError("接続文字列が設定されていません")
+        raise ValueError("接続文字列が設定されていません")  # ★文字化けを解消
     logging.info(f"接続文字列: {connection_string}")  # ★接続文字列をログに出力
     conn = pyodbc.connect(connection_string)
     return conn
