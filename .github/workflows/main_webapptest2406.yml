@@ -86,3 +86,4 @@ jobs:
 
       - name: Display deployment URL
         run: echo "Deployment URL: ${{ steps.deploy-to-webapp.outputs.webapp-url }}"
+        if: always()
