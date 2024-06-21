@@ -34,7 +34,7 @@ jobs:
 
       - name: Zip artifact for deployment
         run: |
-          zip -r release.zip . -x 'venv/*' '.git/*' 'release.zip'
+          zip -r release.zip . -x 'antenv/*' '.git/*' 'release.zip'
           ls -lh release.zip
 
       - name: Upload artifact for deployment jobs
