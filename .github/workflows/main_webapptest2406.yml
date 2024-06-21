@@ -26,9 +26,9 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: Package artifact for deployment
+     - name: Package artifact for deployment
         run: | 
-          tar -czvf output.tar.gz --exclude='venv' --exclude='.git' --exclude='output.tar.gz' . 
+          tar -czvf output.tar.gz --exclude='venv' --exclude='.git' --exclude='output.tar.gz' --ignore-failed-read . 
 
       - name: Upload artifact for deployment jobs
         uses: actions/upload-artifact@v3
