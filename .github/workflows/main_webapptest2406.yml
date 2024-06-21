@@ -80,6 +80,3 @@ jobs:
         with:
           app-name: 'WebAppTest2406'
           slot-name: 'Production'
-
-      - name: List contents after deployment
-        run: ls -lh /home/site/wwwroot
