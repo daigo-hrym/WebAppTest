@@ -30,11 +30,11 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
         
-      # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
+   # Optional: Add step to run tests here (PyTest, Django test suites, etc.)
 
       - name: Zip artifact for deployment
         run: |
-          zip -r release.zip . -x '.git/*' 'release.zip'
+          zip -r release.zip . -x 'antenv/*' 'venv/*' '.git/*' 'release.zip'
           ls -lh release.zip
 
       - name: Upload artifact for deployment jobs

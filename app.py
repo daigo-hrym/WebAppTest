@@ -30,7 +30,7 @@ app.logger.debug(f"アプリケーションはポート {port} で実行され�
 
 def get_db_connection():
     try:
-        conn = pymssql.connect(server=server, user=user, password=password, database=database, port=port)
+        conn = pymssql.connect(connection_string)
         app.logger.info("DB接続成功")
         return conn
     except Exception as e:
@@ -58,7 +58,7 @@ def home():
 def search_member():
     member_id = request.args.get('memberId')
     app.logger.info(f"画面から受け取った会員ID: {member_id}")
-    app.logger.info(f"使用する接続情報: サーバー={server}, データベース={database}, ポート={port}")
+    app.logger.info(f"使用する接続情報: {connection_string}")
 
     if not member_id:
         return jsonify({"error": True, "message": "会員IDが提供されていません"}), 400
