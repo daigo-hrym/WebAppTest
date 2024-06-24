@@ -1,6 +1,6 @@
 from flask import Flask, request, jsonify, render_template, send_from_directory
 import logging
-import pyodbc
+import pymssql
 import os
 from logging.handlers import RotatingFileHandler
 
@@ -10,7 +10,7 @@ app = Flask(__name__)
 log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.log')
 handler = RotatingFileHandler(log_file_path, maxBytes=100000, backupCount=1, encoding='utf-8')
 handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+formatter = logging.Formatter('%(asctime)s %(levellevelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
@@ -29,12 +29,8 @@ port = int(os.getenv('PORT', 61234))
 app.logger.debug(f"アプリケーションはポート {port} で実行されます。")
 
 def get_db_connection():
-    if not connection_string:
-        app.logger.error("接続文字列が設定されていません")
-        raise ValueError("接続文字列が設定されていません")
-    app.logger.info(f"接続文字列: {connection_string}")
     try:
-        conn = pyodbc.connect(connection_string)
+        conn = pymssql.connect(server=server, user=user, password=password, database=database, port=port)
         app.logger.info("DB接続成功")
         return conn
     except Exception as e:
@@ -45,7 +41,7 @@ def get_member_name(member_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT name FROM dbo.members WHERE id=?", (member_id,))
+        cursor.execute("SELECT name FROM dbo.members WHERE id=%s", (member_id,))
         result = cursor.fetchone()
         conn.close()
         app.logger.info(f"SQLクエリ結果: {result}")
@@ -62,8 +58,7 @@ def home():
 def search_member():
     member_id = request.args.get('memberId')
     app.logger.info(f"画面から受け取った会員ID: {member_id}")
-    app.logger.info(f"使用する接続文字列: {connection_string}")
-    app.logger.info(f"使用するポート: {port}")
+    app.logger.info(f"使用する接続情報: サーバー={server}, データベース={database}, ポート={port}")
 
     if not member_id:
         return jsonify({"error": True, "message": "会員IDが提供されていません"}), 400
