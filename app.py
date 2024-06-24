@@ -10,7 +10,7 @@ app = Flask(__name__)
 log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.log')
 handler = RotatingFileHandler(log_file_path, maxBytes=100000, backupCount=1, encoding='utf-8')
 handler.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+formatter = logging.Formatter('%(asctime)s %(levellevelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
@@ -18,6 +18,7 @@ app.logger.addHandler(handler)
 connection_string = os.getenv('DB_CONNECTION_STRING')
 
 # デバッグ用のログを追加
+app.logger.info(f"接続文字列（取得前）: {os.getenv('DB_CONNECTION_STRING')}")  # ★
 if not connection_string:
     app.logger.error("接続文字列が設定されていません")
 else:
