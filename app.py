@@ -10,27 +10,38 @@ app = Flask(__name__)
 log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.log')
 handler = RotatingFileHandler(log_file_path, maxBytes=100000, backupCount=1, encoding='utf-8')
 handler.setLevel(logging.DEBUG)
-formatter = logging.Formatter('%(asctime)s %(levellevelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
-# 簡易ログファイル
-simple_log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'simple_app.log')
-with open(simple_log_path, 'w') as f:
-    f.write('簡易ログファイルの作成に成功しました。\n')
+# 環境変数から接続情報を取得
+connection_string = os.getenv('DB_CONNECTION_STRING')
 
-# テストログを追加
-app.logger.debug("ログ設定が完了しました。")
+# デバッグ用のログを追加
+if not connection_string:
+    app.logger.error("接続文字列が設定されていません")
+else:
+    app.logger.info(f"接続文字列: {connection_string}")
 
-# ハードコーディングされた接続文字列
-connection_string = "Server=tcp:webapptest-sqlserver.database.windows.net,1433;Initial Catalog=mydatabase;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication='Active Directory Default'"
-
-port = int(os.getenv('PORT', 61234))
-app.logger.debug(f"アプリケーションはポート {port} で実行されます。")
+port = int(os.getenv('PORT', 61234))  # 環境変数からポートを取得、デフォルトは 61234
 
 def get_db_connection():
+    if not connection_string:
+        app.logger.error("接続文字列が設定されていません")
+        raise ValueError("接続文字列が設定されていません")
+    app.logger.info(f"接続文字列: {connection_string}")
     try:
-        conn = pymssql.connect(connection_string)
+        conn = pymssql.connect(
+            server='webapptest-sqlserver.database.windows.net',
+            user='',  # 環境変数に設定している場合はこの行を削除
+            password='',  # 環境変数に設定している場合はこの行を削除
+            database='mydatabase',
+            port=1433,
+            encrypt=True,
+            trust_cert=False,
+            conn_timeout=30,
+            auth_mech='ActiveDirectoryMsi'
+        )
         app.logger.info("DB接続成功")
         return conn
     except Exception as e:
@@ -58,7 +69,8 @@ def home():
 def search_member():
     member_id = request.args.get('memberId')
     app.logger.info(f"画面から受け取った会員ID: {member_id}")
-    app.logger.info(f"使用する接続情報: {connection_string}")
+    app.logger.info(f"使用する接続文字列: {connection_string}")
+    app.logger.info(f"使用するポート: {port}")
 
     if not member_id:
         return jsonify({"error": True, "message": "会員IDが提供されていません"}), 400
