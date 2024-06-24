@@ -14,7 +14,7 @@ formatter = logging.Formatter('%(asctime)s %(levellevelname)s: %(message)s', dat
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
-# ハードコーディングされた接続文字列
+# ハードコーディングされた接続文字列　
 connection_string = "Server=tcp:webapptest-sqlserver.database.windows.net,1433;Initial Catalog=mydatabase;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication='Active Directory Default'"
 
 port = int(os.getenv('PORT', 61234))  # 環境変数からポートを取得、デフォルトは 61234
