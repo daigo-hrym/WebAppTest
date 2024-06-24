@@ -15,7 +15,7 @@ handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
 # 環境変数から接続情報を取得
-connection_string = os.getenv('DB_CONNECTION_STRING')
+connection_string = "Server=tcp:webapptest-sqlserver.database.windows.net,1433;Initial Catalog=mydatabase;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication='Active Directory Default'"
 
 # デバッグ用のログを追加
 app.logger.info(f"接続文字列（取得前）: {os.getenv('DB_CONNECTION_STRING')}")  # ★
