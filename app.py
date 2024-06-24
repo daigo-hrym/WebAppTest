@@ -5,7 +5,7 @@ import pymssql
 
 app = Flask(__name__)
 
-# ログ設定
+# ★ ログ設定
 log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.log')
 handler = logging.handlers.RotatingFileHandler(log_file_path, maxBytes=100000, backupCount=1, encoding='utf-8')
 handler.setLevel(logging.DEBUG)
@@ -13,11 +13,11 @@ formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', datefmt=
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
-# 環境変数から接続情報を取得
+# ★ 環境変数から接続情報を取得
 connection_string = os.getenv('DB_CONNECTION_STRING')
 port = int(os.getenv('PORT', 61234))
 
-# デバッグ用のログを追加
+# ★ デバッグ用のログを追加
 if not connection_string:
     app.logger.error("接続文字列が設定されていません")
 else:
