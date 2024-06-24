@@ -14,15 +14,8 @@ formatter = logging.Formatter('%(asctime)s %(levellevelname)s: %(message)s', dat
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
-# 環境変数から接続情報を取得
+# ハードコーディングされた接続文字列
 connection_string = "Server=tcp:webapptest-sqlserver.database.windows.net,1433;Initial Catalog=mydatabase;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication='Active Directory Default'"
-
-# デバッグ用のログを追加
-#app.logger.info(f"接続文字列（取得前）: {os.getenv('DB_CONNECTION_STRING')}")  # ★
-#if not connection_string:
-# #    app.logger.error("接続文字列が設定されていません")
-#else:
-#    app.logger.info(f"接続文字列: {connection_string}")
 
 port = int(os.getenv('PORT', 61234))  # 環境変数からポートを取得、デフォルトは 61234
 
@@ -30,17 +23,26 @@ def get_db_connection():
     if not connection_string:
         raise ValueError("接続文字列が設定されていません")
     app.logger.info(f"接続文字列: {connection_string}")
-    conn = pyodbc.connect(connection_string)
-    return conn
+    try:
+        conn = pyodbc.connect(connection_string)
+        app.logger.info("DB接続成功")  # ★DB接続成功をログに記録
+        return conn
+    except Exception as e:
+        app.logger.error(f"DB接続失敗: {e}")  # ★DB接続失敗をログに記録
+        raise
 
 def get_member_name(member_id):
-    conn = get_db_connection()
-    cursor = conn.cursor()
-    cursor.execute("SELECT name FROM dbo.members WHERE id=?", (member_id,))
-    result = cursor.fetchone()
-    conn.close()
-    app.logger.info(f"SQLクエリ結果: {result}")
-    return result
+    try:
+        conn = get_db_connection()
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM dbo.members WHERE id=?", (member_id,))
+        result = cursor.fetchone()
+        conn.close()
+        app.logger.info(f"SQLクエリ結果: {result}")  # ★SQLクエリ結果をログに記録
+        return result
+    except Exception as e:
+        app.logger.error(f"DB操作失敗: {e}")  # ★DB操作失敗をログに記録
+        raise
 
 @app.route('/')
 def home():
@@ -49,6 +51,10 @@ def home():
 @app.route('/search', methods=['GET'])
 def search_member():
     member_id = request.args.get('memberId')
+    app.logger.info(f"画面から受け取った会員ID: {member_id}")  # ★受け取った会員IDをログに記録
+    app.logger.info(f"使用する接続文字列: {connection_string}")  # ★使用する接続文字列をログに記録
+    app.logger.info(f"使用するポート: {port}")  # ★使用するポートをログに記録
+
     if not member_id:
         return jsonify({"error": True, "message": "会員IDが提供されていません"}), 400
     
