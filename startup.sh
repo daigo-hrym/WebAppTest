@@ -4,12 +4,12 @@
 echo "PORT before setting: $PORT" >> /home/LogFiles/startup.log
 echo "DB_CONNECTION_STRING before setting: $DB_CONNECTION_STRING" >> /home/LogFiles/startup.log
 
-# ★ 必要な環境変数をエクスポート
+# ★ 環境変数の設定（明示的に設定）
 export PATH=$PATH:/home/.local/bin
 
-# ★ 環境変数の設定（確実にエクスポートされるように）
+# ★ DB_CONNECTION_STRING を明示的に設定
+export DB_CONNECTION_STRING='Server=tcp:webapptest-sqlserver.database.windows.net,1433;Initial Catalog=mydatabase;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default"'
 export PORT=61234
-export DB_CONNECTION_STRING="$DB_CONNECTION_STRING"
 
 # 環境変数の確認
 echo "PORT after setting: $PORT" >> /home/LogFiles/startup.log
