@@ -9,26 +9,36 @@ app = Flask(__name__)
 # ログ設定
 log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.log')
 handler = RotatingFileHandler(log_file_path, maxBytes=100000, backupCount=1, encoding='utf-8')
-handler.setLevel(logging.INFO)
-formatter = logging.Formatter('%(asctime)s %(levellevelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
+handler.setLevel(logging.DEBUG)
+formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', datefmt='%Y-%m-%d %H:%M:%S')
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
-# ハードコーディングされた接続文字列　
+# 簡易ログファイル
+simple_log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'simple_app.log')
+with open(simple_log_path, 'w') as f:
+    f.write('簡易ログファイルの作成に成功しました。\n')
+
+# テストログを追加
+app.logger.debug("ログ設定が完了しました。")
+
+# ハードコーディングされた接続文字列
 connection_string = "Server=tcp:webapptest-sqlserver.database.windows.net,1433;Initial Catalog=mydatabase;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication='Active Directory Default'"
 
-port = int(os.getenv('PORT', 61234))  # 環境変数からポートを取得、デフォルトは 61234
+port = int(os.getenv('PORT', 61234))
+app.logger.debug(f"アプリケーションはポート {port} で実行されます。")
 
 def get_db_connection():
     if not connection_string:
+        app.logger.error("接続文字列が設定されていません")
         raise ValueError("接続文字列が設定されていません")
     app.logger.info(f"接続文字列: {connection_string}")
     try:
         conn = pyodbc.connect(connection_string)
-        app.logger.info("DB接続成功")  # ★DB接続成功をログに記録
+        app.logger.info("DB接続成功")
         return conn
     except Exception as e:
-        app.logger.error(f"DB接続失敗: {e}")  # ★DB接続失敗をログに記録
+        app.logger.error(f"DB接続失敗: {e}")
         raise
 
 def get_member_name(member_id):
@@ -38,10 +48,10 @@ def get_member_name(member_id):
         cursor.execute("SELECT name FROM dbo.members WHERE id=?", (member_id,))
         result = cursor.fetchone()
         conn.close()
-        app.logger.info(f"SQLクエリ結果: {result}")  # ★SQLクエリ結果をログに記録
+        app.logger.info(f"SQLクエリ結果: {result}")
         return result
     except Exception as e:
-        app.logger.error(f"DB操作失敗: {e}")  # ★DB操作失敗をログに記録
+        app.logger.error(f"DB操作失敗: {e}")
         raise
 
 @app.route('/')
@@ -51,9 +61,9 @@ def home():
 @app.route('/search', methods=['GET'])
 def search_member():
     member_id = request.args.get('memberId')
-    app.logger.info(f"画面から受け取った会員ID: {member_id}")  # ★受け取った会員IDをログに記録
-    app.logger.info(f"使用する接続文字列: {connection_string}")  # ★使用する接続文字列をログに記録
-    app.logger.info(f"使用するポート: {port}")  # ★使用するポートをログに記録
+    app.logger.info(f"画面から受け取った会員ID: {member_id}")
+    app.logger.info(f"使用する接続文字列: {connection_string}")
+    app.logger.info(f"使用するポート: {port}")
 
     if not member_id:
         return jsonify({"error": True, "message": "会員IDが提供されていません"}), 400
