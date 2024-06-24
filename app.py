@@ -10,16 +10,23 @@ log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.lo
 logging.basicConfig(filename=log_file_path, level=logging.INFO, 
                     format='%(asctime)s %(levelname)s: %(message)s', 
                     datefmt='%Y-%m-%d %H:%M:%S', 
-                    encoding='utf-8')  # ★エンコーディングとフォーマットを指定
+                    encoding='utf-8')  # エンコーディングとフォーマットを指定
 
 # 環境変数から接続情報を取得
 connection_string = os.getenv('DB_CONNECTION_STRING')
+
+# デバッグ用のログを追加★
+if not connection_string:  # ★
+    logging.error("接続文字列が設定されていません")  # ★
+else:  # ★
+    logging.info(f"接続文字列: {connection_string}")  # ★
+
 port = int(os.getenv('PORT', 61234))  # 環境変数からポートを取得、デフォルトは 61234
 
 def get_db_connection():
     if not connection_string:
-        raise ValueError("接続文字列が設定されていません")  # ★文字化けを解消
-    logging.info(f"接続文字列: {connection_string}")  # ★接続文字列をログに出力
+        raise ValueError("接続文字列が設定されていません")  #文字化けを解消
+    logging.info(f"接続文字列: {connection_string}")  #接続文字列をログに出力
     conn = pyodbc.connect(connection_string)
     return conn
 
@@ -29,7 +36,7 @@ def get_member_name(member_id):
     cursor.execute("SELECT name FROM dbo.members WHERE id=?", (member_id,))
     result = cursor.fetchone()
     conn.close()
-    logging.info(f"SQLクエリ結果: {result}")  # ★SQLクエリ結果をログに出力
+    logging.info(f"SQLクエリ結果: {result}")  # SQLクエリ結果をログに出力
     return result
 
 @app.route('/')
