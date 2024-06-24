@@ -2,6 +2,7 @@
 
 # 環境変数の確認
 echo "PORT before setting: $PORT" >> /home/LogFiles/startup.log
+echo "DB_CONNECTION_STRING before setting: $DB_CONNECTION_STRING" >> /home/LogFiles/startup.log
 
 # 必要な環境変数をエクスポート
 export PATH=$PATH:/home/.local/bin
@@ -11,6 +12,7 @@ export PORT=61234
 
 # 環境変数の確認
 echo "PORT after setting: $PORT" >> /home/LogFiles/startup.log
+echo "DB_CONNECTION_STRING: $DB_CONNECTION_STRING" >> /home/LogFiles/startup.log
 
 # リポジトリのディレクトリに移動
 cd /home/site/wwwroot
