@@ -18,11 +18,11 @@ app.logger.addHandler(handler)
 connection_string = "Server=tcp:webapptest-sqlserver.database.windows.net,1433;Initial Catalog=mydatabase;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication='Active Directory Default'"
 
 # デバッグ用のログを追加
-app.logger.info(f"接続文字列（取得前）: {os.getenv('DB_CONNECTION_STRING')}")  # ★
-if not connection_string:
-    app.logger.error("接続文字列が設定されていません")
-else:
-    app.logger.info(f"接続文字列: {connection_string}")
+#app.logger.info(f"接続文字列（取得前）: {os.getenv('DB_CONNECTION_STRING')}")  # ★
+#if not connection_string:
+# #    app.logger.error("接続文字列が設定されていません")
+#else:
+#    app.logger.info(f"接続文字列: {connection_string}")
 
 port = int(os.getenv('PORT', 61234))  # 環境変数からポートを取得、デフォルトは 61234
 
