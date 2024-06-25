@@ -34,9 +34,11 @@ def get_db_connection():
     connection_params = {
         'server': 'webapptest-sqlserver.database.windows.net',
         'database': 'mydatabase',
+        'user': '',  # 空白のままにする
+        'password': '',  # 空白のままにする
         'port': 1433,
-        'trusted_connection': 'yes',  # ADO.NET パスワードレス認証用
-        'auth_mech': 'ActiveDirectoryMsi'
+        'as_dict': True,
+        'authentication': 'ActiveDirectoryMsi'
     }
     try:
         conn = pymssql.connect(**connection_params)
