@@ -2,6 +2,7 @@ import os
 import logging
 from flask import Flask, request, jsonify, render_template
 import pymssql
+import urllib.parse
 
 app = Flask(__name__)
 
@@ -19,7 +20,7 @@ port = int(os.getenv('PORT', 61234))
 
 # ★ デバッグ用のログを追加
 if not connection_string:
-    app.logger.error("接続文字列が設定されていません")
+    app.logger.error(f"接続文字列が設定されていません: {connection_string}")
 else:
     app.logger.info(f"接続文字列: {connection_string}")
 
@@ -27,25 +28,32 @@ app.logger.info(f"使用するポート: {port}")
 
 def get_db_connection():
     if not connection_string:
-        app.logger.error("接続文字列が設定されていません")
+        app.logger.error(f"接続文字列が設定されていません: {connection_string}")
         raise ValueError("接続文字列が設定されていません")
 
     # ★ connection_string を解析して必要な部分を抽出
+    parsed_conn = urllib.parse.urlparse(connection_string)
+    server = parsed_conn.hostname
+    database = urllib.parse.parse_qs(parsed_conn.query).get('Initial Catalog', [None])[0]
+    user = parsed_conn.username
+    password = parsed_conn.password
+    port = parsed_conn.port if parsed_conn.port else 1433
+
     connection_params = {
-        'server': 'webapptest-sqlserver.database.windows.net',
-        'database': 'mydatabase',
-        'user': '',  # 空白のままにする
-        'password': '',  # 空白のままにする
-        'port': 1433,
+        'server': server,
+        'database': database,
+        'user': user,
+        'password': password,
+        'port': port,
         'as_dict': True,
-        'authentication': 'ActiveDirectoryMsi'
     }
+
     try:
         conn = pymssql.connect(**connection_params)
-        app.logger.info("DB接続成功")
+        app.logger.info(f"DB接続成功 - server: {server}, database: {database}, user: {user}, port: {port}")
         return conn
     except Exception as e:
-        app.logger.error(f"DB接続失敗: {e}")
+        app.logger.error(f"DB接続失敗 - server: {server}, database: {database}, user: {user}, port: {port}, error: {e}")
         raise
 
 def get_member_name(member_id):
