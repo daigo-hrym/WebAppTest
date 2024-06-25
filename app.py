@@ -29,16 +29,17 @@ def get_db_connection():
     if not connection_string:
         app.logger.error("接続文字列が設定されていません")
         raise ValueError("接続文字列が設定されていません")
+
+    # ★ connection_string を解析して必要な部分を抽出
+    connection_params = {
+        'server': 'webapptest-sqlserver.database.windows.net',
+        'database': 'mydatabase',
+        'port': 1433,
+        'trusted_connection': 'yes',  # ADO.NET パスワードレス認証用
+        'auth_mech': 'ActiveDirectoryMsi'
+    }
     try:
-        conn = pymssql.connect(
-            server='webapptest-sqlserver.database.windows.net',
-            database='mydatabase',
-            port=1433,
-            encrypt=True,
-            trust_cert=False,
-            conn_timeout=30,
-            auth_mech='ActiveDirectoryMsi'
-        )
+        conn = pymssql.connect(**connection_params)
         app.logger.info("DB接続成功")
         return conn
     except Exception as e:
