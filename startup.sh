@@ -8,7 +8,7 @@ echo "DB_CONNECTION_STRING before setting: $DB_CONNECTION_STRING" >> /home/LogFi
 export PATH=$PATH:/home/.local/bin
 
 # ★ DB_CONNECTION_STRING を明示的に設定
-export DB_CONNECTION_STRING='Server=tcp:webapptest-sqlserver.database.windows.net,1433;Initial Catalog=mydatabase;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;Authentication="Active Directory Default"'
+export DB_CONNECTION_STRING='Driver={ODBC Driver 18 for SQL Server};Server=tcp:webapptest-sqlserver.database.windows.net,1433;Database=mydatabase;Uid={daigo.hirayama@accenture.com};Encrypt=yes;TrustServerCertificate=no;Connection Timeout=30;Authentication=ActiveDirectoryIntegrated'
 export PORT=61234
 
 # 環境変数の確認
