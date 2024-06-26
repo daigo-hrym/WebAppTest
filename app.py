@@ -1,12 +1,12 @@
 import os
 import logging
 from flask import Flask, request, jsonify, render_template
-import pymssql
+import pyodbc  # ★ ODBC ドライバに変更
 import urllib.parse
 
 app = Flask(__name__)
 
-# ★ ログ設定
+#ログ設定
 log_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'app.log')
 handler = logging.handlers.RotatingFileHandler(log_file_path, maxBytes=100000, backupCount=1, encoding='utf-8')
 handler.setLevel(logging.DEBUG)
@@ -14,11 +14,11 @@ formatter = logging.Formatter('%(asctime)s %(levelname)s: %(message)s', datefmt=
 handler.setFormatter(formatter)
 app.logger.addHandler(handler)
 
-# ★ 環境変数から接続情報を取得
+#環境変数から接続情報を取得
 connection_string = os.getenv('DB_CONNECTION_STRING')
-port = int(os.getenv('PORT', 61234))
+port = int(os.getenv('PORT'))
 
-# ★ デバッグ用のログを追加
+# デバッグ用のログを追加
 if not connection_string:
     app.logger.error(f"接続文字列が設定されていません: {connection_string}")
 else:
@@ -31,36 +31,22 @@ def get_db_connection():
         app.logger.error(f"接続文字列が設定されていません: {connection_string}")
         raise ValueError("接続文字列が設定されていません")
 
-    # ★ connection_string を解析して必要な部分を抽出
-    parsed_conn = urllib.parse.urlparse(connection_string)
-    server = parsed_conn.hostname
-    database = urllib.parse.parse_qs(parsed_conn.query).get('Initial Catalog', [None])[0]
-    user = parsed_conn.username
-    password = parsed_conn.password
-    port = parsed_conn.port if parsed_conn.port else 1433
-
-    connection_params = {
-        'server': server,
-        'database': database,
-        'user': user,
-        'password': password,
-        'port': port,
-        'as_dict': True,
-    }
+    # ★ connection_string を直接使用
+    conn_str = connection_string
 
     try:
-        conn = pymssql.connect(**connection_params)
-        app.logger.info(f"DB接続成功 - server: {server}, database: {database}, user: {user}, port: {port}")
+        conn = pyodbc.connect(conn_str)
+        app.logger.info(f"DB接続成功 - connection_string: {connection_string}")
         return conn
     except Exception as e:
-        app.logger.error(f"DB接続失敗 - server: {server}, database: {database}, user: {user}, port: {port}, error: {e}")
+        app.logger.error(f"DB接続失敗 - connection_string: {connection_string}, error: {e}")
         raise
 
 def get_member_name(member_id):
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
-        cursor.execute("SELECT name FROM dbo.members WHERE id=%s", (member_id,))
+        cursor.execute("SELECT name FROM dbo.members WHERE id=?", (member_id,))
         result = cursor.fetchone()
         conn.close()
         app.logger.info(f"SQLクエリ結果: {result}")
