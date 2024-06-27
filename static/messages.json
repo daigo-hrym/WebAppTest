@@ -1,0 +1,6 @@
+{
+    "invalid_format": "半角英数字を入力してください",
+    "error_occurred": "エラーが発生しました",
+    "id_not_provided": "会員IDが提供されていません",
+    "id_not_found": "指定されたIDは存在しません"
+}

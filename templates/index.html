@@ -8,14 +8,16 @@
 </head>
 <body>
     <div class="container">
-        <h1>会員検索システム</h1>
+        <h1>会員検索システム（6/27 17:46）</h1>
         <div class="form-group">
-            <label for="member-id">会員ID　※2024/06/26 21:36更新:</label>
+            <label for="member-id">会員ID:</label>
             <input type="text" id="member-id" placeholder="会員IDを入力してください">
             <button id="search-btn">検索</button>
         </div>
-        <div id="message" class="message"></div>
-        <div id="result" class="result"></div>
+    </div>
+    <!-- ● メッセージ表示用のポップアップ -->
+    <div id="popup-message" class="popup">
+        <div id="popup-content" class="popup-content"></div>
     </div>
     <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
