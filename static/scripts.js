@@ -11,10 +11,10 @@ document.getElementById('search-btn').addEventListener('click', function() {
             const memberId = document.getElementById('member-id').value.trim();
             const messageElement = document.getElementById('message');
             const resultElement = document.getElementById('result');
-            const popupMessage = document.getElementById('popup-message'); // ● 追加: ポップアップ要素の取得
-            const popupContent = document.getElementById('popup-content'); // ● 追加: ポップアップ要素の取得
+            const popupMessage = document.getElementById('popup-message');
+            const popupContent = document.getElementById('popup-content');
 
-            if (!messageElement || !resultElement || !popupMessage || !popupContent) { // ● 変更: ポップアップ要素の存在確認
+            if (!messageElement || !resultElement || !popupMessage || !popupContent) {
                 console.error("メッセージまたは結果表示用の要素が見つかりません");
                 return;
             }
@@ -26,9 +26,11 @@ document.getElementById('search-btn').addEventListener('click', function() {
 
             if (!/^[a-zA-Z0-9]+$/.test(memberId)) {
                 console.log("無効な会員ID形式:", memberId);
-                popupContent.textContent = messages.invalid_format; // ● 変更: ポップアップにメッセージを表示
-                popupMessage.style.display = 'block'; // ● 変更: ポップアップを表示
+                popupContent.textContent = messages.invalid_format;
+                popupMessage.style.display = 'block';
+                console.log("ポップアップを表示します: 無効な会員ID形式");
                 document.getElementById('member-id').value = '';
+                console.log("ポップアップが表示されました: 無効な会員ID形式", popupMessage.style.display);
                 return;
             }
 
@@ -40,25 +42,31 @@ document.getElementById('search-btn').addEventListener('click', function() {
                 .then(data => {
                     console.log("検索結果が返されました:", data);
                     if (data.error) {
-                        popupContent.textContent = `エラー：${data.message}`; // ● 変更: ポップアップにエラーメッセージを表示
-                        popupMessage.style.display = 'block'; // ● 変更: ポップアップを表示
+                        popupContent.textContent = `エラー：${data.message}`;
+                        popupMessage.style.display = 'block';
+                        console.log("ポップアップを表示します: エラー", data.message);
                     } else {
-                        popupContent.textContent = `会員名：${data.name}`; // ● 変更: ポップアップに検索結果を表示
-                        popupMessage.style.display = 'block'; // ● 変更: ポップアップを表示
+                        popupContent.textContent = `会員名：${data.name}`;
+                        popupMessage.style.display = 'block';
+                        console.log("ポップアップを表示します: 会員名", data.name);
                     }
+                    console.log("ポップアップが表示されました: 検索結果", popupMessage.style.display);
                 })
                 .catch(error => {
                     console.error("検索リクエスト中にエラーが発生しました:", error);
-                    popupContent.textContent = `${messages.error_occurred}：${error.message}`; // ● 変更: ポップアップにエラーメッセージを表示
-                    popupMessage.style.display = 'block'; // ● 変更: ポップアップを表示
+                    popupContent.textContent = `${messages.error_occurred}：${error.message}`;
+                    popupMessage.style.display = 'block';
+                    console.log("ポップアップを表示します: エラー", error.message);
+                    console.log("ポップアップが表示されました: エラー", popupMessage.style.display);
                 });
         })
         .catch(error => {
             console.error("messages.jsonの読み込み中にエラーが発生しました:", error);
         });
 
-    // ● ポップアップを閉じるためのイベントリスナー
+    // ポップアップを閉じるためのイベントリスナー
     document.getElementById('popup-message').addEventListener('click', function() {
         this.style.display = 'none';
+        console.log("ポップアップが閉じられました");
     });
 });
