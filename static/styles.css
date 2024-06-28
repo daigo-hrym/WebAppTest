@@ -57,6 +57,23 @@ button:hover {
     display: none;
 }
 
+.popup {
+    display: none; /* 初期状態で非表示 */
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.popup-content {
+    margin: 10px 0;
+}
+
+
 @media (max-width: 600px) {
     .container {
         width: 100%;
