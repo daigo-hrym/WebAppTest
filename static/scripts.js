@@ -1,25 +1,31 @@
 document.getElementById('search-btn').addEventListener('click', function() {
     console.log("検索ボタンがクリックされました");
-    
-    fetch('/static/messages.json')
-        .then(response => response.json())
-        .then(messages => {
-            console.log("messages.jsonが読み込まれました:", messages);
-            const memberId = document.getElementById('member-id').value.trim();
-            const popupMessage = document.getElementById('popup-message');
-            const popupContent = document.getElementById('popup-content');
 
-            if (!popupMessage || !popupContent) {
-                console.error("ポップアップ要素が見つかりません");
+    fetch('/static/messages.json')
+        .then(response => {
+            console.log("messages.jsonが読み込まれました:", response);
+            return response.json();
+        })
+        .then(messages => {
+            console.log("messages.jsonの内容:", messages);
+            const memberId = document.getElementById('member-id').value.trim();
+            const messageElement = document.getElementById('message');
+            const resultElement = document.getElementById('result');
+
+            if (!messageElement || !resultElement) {
+                console.error("メッセージまたは結果表示用の要素が見つかりません");
                 return;
             }
 
             console.log("入力された会員ID:", memberId);
 
+            messageElement.style.display = 'none';
+            resultElement.style.display = 'none';
+
             if (!/^[a-zA-Z0-9]+$/.test(memberId)) {
                 console.log("無効な会員ID形式:", memberId);
-                popupContent.textContent = messages.invalid_format;
-                popupMessage.style.display = 'block';
+                messageElement.textContent = messages.invalid_format;
+                messageElement.style.display = 'block';
                 document.getElementById('member-id').value = '';
                 return;
             }
@@ -32,16 +38,17 @@ document.getElementById('search-btn').addEventListener('click', function() {
                 .then(data => {
                     console.log("検索結果が返されました:", data);
                     if (data.error) {
-                        popupContent.textContent = `エラー：${data.message}`;
+                        messageElement.textContent = `エラー：${data.message}`;
+                        messageElement.style.display = 'block';
                     } else {
-                        popupContent.textContent = `会員名：${data.name}`;
+                        resultElement.textContent = `会員名：${data.name}`;
+                        resultElement.style.display = 'block';
                     }
-                    popupMessage.style.display = 'block';
                 })
                 .catch(error => {
                     console.error("検索リクエスト中にエラーが発生しました:", error);
-                    popupContent.textContent = `${messages.error_occurred}：${error.message}`;
-                    popupMessage.style.display = 'block';
+                    messageElement.textContent = `${messages.error_occurred}：${error.message}`;
+                    messageElement.style.display = 'block';
                 });
         })
         .catch(error => {
