@@ -79,32 +79,35 @@ button:hover {
     margin: 10px 0;
 }
 
-/* 横並びレイアウト用のスタイル */
+/* 横並びレイアウト用のスタイル（デフォルト） */
 .horizontal,
 .form-group.horizontal {
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
 }
 
 .horizontal label,
 .form-group.horizontal label {
     margin-right: 10px;
-    margin-bottom: 0;
+    margin-bottom: 5px;
     white-space: nowrap;
 }
 
 .horizontal input,
 .form-group.horizontal input {
     flex: 1;
+    min-width: 0;
     margin-right: 10px;
-    width: auto;
+    margin-bottom: 5px;
 }
 
 .horizontal button,
 .form-group.horizontal button {
     width: auto;
     padding: 8px 20px;
+    margin-bottom: 5px;
 }
 
 /* レスポンシブデザイン用のスタイル */
@@ -117,13 +120,24 @@ button:hover {
 
     .horizontal label,
     .horizontal input,
-    .horizontal button,
     .form-group.horizontal label,
-    .form-group.horizontal input,
-    .form-group.horizontal button {
+    .form-group.horizontal input {
         width: 100%;
         margin-right: 0;
         margin-bottom: 10px;
+    }
+
+    /* スマホの縦画面でもボタンを横並びに */
+    .horizontal button,
+    .form-group.horizontal button {
+        width: auto;
+        padding: 8px 20px;
+    }
+
+    /* ボタンを中央寄せ */
+    .horizontal,
+    .form-group.horizontal {
+        justify-content: center;
     }
 }
 
