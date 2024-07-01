@@ -4,13 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>会員検索システム</title>
-    <link rel="stylesheet" href="styles.css">
+    ▼ <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
     <div class="container">
         <h1>会員検索システム</h1>
-        <p class="update-date">PGM更新日付：7/1 16:56</p>
-        <!-- ▼ form-group に horizontal クラスを追加 -->
+        <p class="update-date">PGM更新日付：7/1 17:21</p>
         <div class="form-group horizontal">
             <label for="member-id">会員ID:</label>
             <input type="text" id="member-id" name="member-id" required>
@@ -19,10 +18,9 @@
         <div id="message" class="message"></div>
         <div id="result" class="result"></div>
     </div>
-    <!-- ▼ ポップアップ用の要素を追加 -->
     <div id="popup-message" class="popup">
         <div id="popup-content" class="popup-content"></div>
     </div>
-    <script src="scripts.js"></script>
+    ▼ <script src="{{ url_for('static', filename='scripts.js') }}"></script>
 </body>
 </html>
