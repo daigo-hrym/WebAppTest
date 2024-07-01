@@ -1,4 +1,3 @@
-/* 既存のスタイル */
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -21,7 +20,7 @@ h1 {
 
 .update-date {
     text-align: left;
-    font-size: 0.8em; /* 小さめの文字サイズ */
+    font-size: 0.4em;
     margin-bottom: 10px;
 }
 
@@ -65,7 +64,7 @@ button:hover {
 }
 
 .popup {
-    display: none; /* 初期状態で非表示 */
+    display: none;
     position: fixed;
     top: 50%;
     left: 50%;
@@ -80,15 +79,17 @@ button:hover {
     margin: 10px 0;
 }
 
-/* ■ 新しいスタイルを追加 */
+/* ▼ 横並びレイアウト用のスタイルを追加 */
 .horizontal {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .horizontal label {
     margin-right: 10px;
     margin-bottom: 0;
+    white-space: nowrap;
 }
 
 .horizontal input {
@@ -98,7 +99,23 @@ button:hover {
 
 .horizontal button {
     width: auto;
-    padding: 10px 20px;
+    padding: 8px 20px;
+}
+
+/* ▼ レスポンシブデザイン用のスタイルを追加 */
+@media (max-width: 480px) {
+    .horizontal {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .horizontal label,
+    .horizontal input,
+    .horizontal button {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+    }
 }
 
 @media (max-width: 600px) {
