@@ -79,39 +79,48 @@ button:hover {
     margin: 10px 0;
 }
 
-/* ▼ 横並びレイアウト用のスタイルを追加 */
-.horizontal {
+/* 横並びレイアウト用のスタイル */
+.horizontal,
+.form-group.horizontal {
     display: flex;
     align-items: center;
     justify-content: space-between;
 }
 
-.horizontal label {
+.horizontal label,
+.form-group.horizontal label {
     margin-right: 10px;
     margin-bottom: 0;
     white-space: nowrap;
 }
 
-.horizontal input {
+.horizontal input,
+.form-group.horizontal input {
     flex: 1;
     margin-right: 10px;
+    width: auto;
 }
 
-.horizontal button {
+.horizontal button,
+.form-group.horizontal button {
     width: auto;
     padding: 8px 20px;
 }
 
-/* ▼ レスポンシブデザイン用のスタイルを追加 */
+/* レスポンシブデザイン用のスタイル */
 @media (max-width: 480px) {
-    .horizontal {
+    .horizontal,
+    .form-group.horizontal {
         flex-direction: column;
         align-items: stretch;
     }
 
     .horizontal label,
     .horizontal input,
-    .horizontal button {
+    .horizontal button,
+    .form-group.horizontal label,
+    .form-group.horizontal input,
+    .form-group.horizontal button {
         width: 100%;
         margin-right: 0;
         margin-bottom: 10px;
