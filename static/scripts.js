@@ -16,7 +16,7 @@ document.getElementById('search-btn').addEventListener('click', function() {
     const memberId = document.getElementById('member-id').value.trim();
 
     if (!/^[a-zA-Z0-9]+$/.test(memberId)) {
-        showPopup("無効な会員ID形式です");
+        showPopup("無効な会員ID形式です。半角英数字のみ使用可能です。");
         document.getElementById('member-id').value = '';
         return;
     }
@@ -41,8 +41,13 @@ document.getElementById('add-btn').addEventListener('click', function() {
     const memberId = document.getElementById('member-id').value.trim();
     const memberName = document.getElementById('member-name').value.trim();
 
-    if (!memberId || !memberName || !/^[a-zA-Z0-9]+$/.test(memberId)) {
-        showPopup("無効な入力です。会員IDは半角英数字、会員名称は必須です。");
+    if (!memberId || !memberName) {
+        showPopup("会員IDと会員名称は必須です。");
+        return;
+    }
+
+    if (!/^[a-zA-Z0-9]+$/.test(memberId)) {
+        showPopup("無効な会員ID形式です。半角英数字のみ使用可能です。");
         return;
     }
 
@@ -67,7 +72,7 @@ document.getElementById('add-btn').addEventListener('click', function() {
     });
 });
 
-// ポップアップを閉じるイベントリスナー（1回だけ定義）
+// ポップアップを閉じるイベントリスナー
 popupMessage.addEventListener('click', function() {
     this.style.display = 'none';
     console.log("ポップアップが閉じられました");
