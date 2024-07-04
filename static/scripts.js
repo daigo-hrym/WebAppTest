@@ -28,7 +28,6 @@ document.getElementById('search-btn').addEventListener('click', function() {
                 console.log("無効な会員ID形式:", memberId);
                 popupContent.textContent = messages.invalid_format;
                 popupMessage.style.display = 'block';
-                console.log("ポップアップを表示します: 無効な会員ID形式");
                 document.getElementById('member-id').value = '';
                 console.log("ポップアップが表示されました: 無効な会員ID形式", popupMessage.style.display);
                 return;
@@ -71,7 +70,6 @@ document.getElementById('search-btn').addEventListener('click', function() {
     });
 });
 
-★
 document.getElementById('add-btn').addEventListener('click', function() {
     const memberId = document.getElementById('member-id').value.trim();
     const memberName = document.getElementById('member-name').value.trim();

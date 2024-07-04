@@ -1,7 +1,7 @@
 import os
 import logging
 from flask import Flask, request, jsonify, render_template
-import pyodbc  # ★ ODBC ドライバに変更
+import pyodbc  #ODBC ドライバに変更
 import urllib.parse
 
 app = Flask(__name__)
@@ -18,20 +18,12 @@ app.logger.addHandler(handler)
 connection_string = os.getenv('DB_CONNECTION_STRING')
 port = int(os.getenv('PORT'))
 
-# デバッグ用のログを追加
-if not connection_string:
-    app.logger.error(f"接続文字列が設定されていません: {connection_string}")
-else:
-    app.logger.info(f"接続文字列: {connection_string}")
-
-app.logger.info(f"使用するポート: {port}")
-
 def get_db_connection():
     if not connection_string:
         app.logger.error(f"接続文字列が設定されていません: {connection_string}")
         raise ValueError("接続文字列が設定されていません")
 
-    # ★ connection_string を直接使用
+    #connection_string を直接使用
     conn_str = connection_string
 
     try:
