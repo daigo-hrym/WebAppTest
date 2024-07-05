@@ -1,9 +1,9 @@
 from flask import Flask, render_template
-from select_member import select_member_bp
+from search_member import search_member_bp
 from add_member import add_member_bp
 
 app = Flask(__name__)
-app.register_blueprint(select_member_bp)
+app.register_blueprint(search_member_bp)
 app.register_blueprint(add_member_bp)
 
 @app.route('/')
