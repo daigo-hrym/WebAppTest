@@ -31,7 +31,7 @@ def send_mail():
     smtp_port = 587
     sender_email = "hirayamadaigo5@gmail.com"  # Gmailアカウント
     password = os.getenv('GMAIL_APP_PASSWORD')  # Appパスワードを環境変数から取得
-    receiver_email = "hirayamadaigo3@example.com"  # 受信者のメールアドレス
+    receiver_email = "hirayamadaigo3@gmail.com"  # 受信者のメールアドレス
 
     # メールの内容を設定
     message = MIMEMultipart("alternative")
