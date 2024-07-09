@@ -25,6 +25,7 @@ def get_db_connection():
 
 @add_member_bp.route('/add', methods=['POST'])
 def add_member():
+    logger.debug("Received request to add member")
     data = request.get_json()
     member_id = data.get('memberId')
     member_name = data.get('memberName')
@@ -47,6 +48,7 @@ def add_member():
 
     # メール送信APIを呼び出し
     try:
+        logger.debug("Sending request to send_mail API: %s", send_mail_url)
         response = requests.post(
             send_mail_url,
             json={"memberId": member_id, "memberName": member_name}
@@ -54,7 +56,7 @@ def add_member():
         response.raise_for_status()
         logger.info("メール送信API呼び出し成功: %s", response.status_code)
     except requests.exceptions.RequestException as e:
-        logger.error("メール送信中にエラーが発生しました: %s", e)
+        logger.error("メール送信API呼び出し失敗: %s", e)
         return jsonify({"error": f"メール送信中にエラーが発生しました: {e}"}), 500
 
     return jsonify({"message": "会員が追加されました"}), 201

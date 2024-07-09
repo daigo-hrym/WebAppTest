@@ -18,6 +18,7 @@ export GMAIL_APP_PASSWORD='efoi qsrs jiwg eqbj'
 # 環境変数の確認
 echo "PORT after setting: $PORT" >> /home/LogFiles/startup.log
 echo "DB_CONNECTION_STRING after setting: $DB_CONNECTION_STRING" >> /home/LogFiles/startup.log
+echo "SEND_MAIL_URL after setting: $SEND_MAIL_URL" >> /home/LogFiles/startup.log
 
 # リポジトリのディレクトリに移動
 cd /home/site/wwwroot

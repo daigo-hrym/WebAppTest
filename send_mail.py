@@ -18,6 +18,7 @@ send_mail_bp = Blueprint('send_mail_bp', __name__)
 
 @send_mail_bp.route('/send-mail', methods=['POST'])
 def send_mail():
+    logger.debug("Received request to send email")
     data = request.get_json()
     member_id = data.get('memberId')
     member_name = data.get('memberName')
@@ -43,9 +44,12 @@ def send_mail():
 
     # Gmailサーバーに接続してメールを送信
     try:
+        logger.debug("Connecting to SMTP server")
         server = smtplib.SMTP(smtp_server, smtp_port)
         server.starttls()
+        logger.debug("Logging in to SMTP server")
         server.login(sender_email, password)
+        logger.debug("Sending email")
         server.sendmail(sender_email, receiver_email, message.as_string())
         server.quit()
         logger.info("メールが送信されました: ID=%s, 名前=%s", member_id, member_name)
