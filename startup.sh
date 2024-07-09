@@ -12,7 +12,7 @@ export DB_CONNECTION_STRING='Driver={ODBC Driver 17 for SQL Server};Server=tcp:w
 export PORT=61234
 
 # SEND_MAIL_URL を明示的に設定
-export SEND_MAIL_URL='https://webapptest2406.azurewebsites.net/'
+export SEND_MAIL_URL='https://webapptest2406.azurewebsites.net/send_mail'
 export GMAIL_APP_PASSWORD='efoi qsrs jiwg eqbj'
 
 # 環境変数の確認
